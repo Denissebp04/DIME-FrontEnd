@@ -34,6 +34,7 @@
   font-weight: 700;
   background: linear-gradient(45deg, #ff4b2b, #ff416c);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -227,6 +228,7 @@
   color: #ff4b2b;
   background: linear-gradient(45deg, #ff4b2b, #ff416c);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -325,4 +327,8 @@
   .mission-content h2 {
     font-size: 2rem;
   }
+}
+
+body {
+  font-family: 'Inter', 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
 } 
