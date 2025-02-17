@@ -1,0 +1,106 @@
+/* You can move budget-specific styles here if needed */
+.budget-amount {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #ff4b2b;
+}
+
+.budget-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.budget-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.budget-info h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+}
+
+.budget-item {
+  background: white;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.budget-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.budget-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f3f4f6;
+  border-radius: 0.5rem;
+  font-size: 1.25rem;
+}
+
+.budget-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.budget-details h3 {
+  margin: 0;
+  font-size: 1.125rem;
+  color: #111827;
+}
+
+.budget-amounts {
+  display: flex;
+  gap: 1rem;
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+.budget-progress {
+  margin-top: 0.5rem;
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-bottom: 0.25rem;
+}
+
+.progress-bar {
+  height: 0.5rem;
+  background: #e5e7eb;
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.progress {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.budget-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.budgets-list {
+  margin-top: 1.5rem;
+} 

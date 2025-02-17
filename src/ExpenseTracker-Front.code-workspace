@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"path": "../../Expense-TrackerBackend"
+		}
+	],
+	"settings": {}
+}

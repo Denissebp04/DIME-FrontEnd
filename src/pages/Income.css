@@ -1,0 +1,132 @@
+/* You can move income-specific styles here if needed */
+.expense-amount.positive {
+  color: #10B981;
+}
+
+.save-button.income-button {
+  background: #10B981;
+}
+
+.save-button.income-button:hover {
+  background: #059669;
+}
+
+.expense-item {
+    background: #f9fafb;
+    border-radius: 0.75rem;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    transition: background-color 0.2s;
+}
+
+.expense-item:hover {
+    background: #f3f4f6;
+}
+
+.expense-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.expense-icon {
+    background: #e5e7eb;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #4b5563;
+}
+
+.expense-details h3 {
+    margin: 0;
+    font-size: 1rem;
+    color: #111827;
+}
+
+.expense-metadata {
+    display: flex;
+    gap: 1rem;
+    color: #6b7280;
+    font-size: 0.875rem;
+}
+
+.expense-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.expense-amount {
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.expense-amount.positive {
+    color: #059669;
+}
+
+.edit-button {
+    background: #f3f4f6;
+    color: #4b5563;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+}
+
+.delete-button {
+    background: #fee2e2;
+    color: #ef4444;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+}
+
+.edit-button:hover {
+    background: #e5e7eb;
+}
+
+.delete-button:hover {
+    background: #fecaca;
+}
+
+.back-link {
+    color: #ff4b2b;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.back-link:hover {
+    color: #ff416c;
+}
+
+.add-link {
+    color: #ff4b2b;
+    text-decoration: none;
+}
+
+.add-link:hover {
+    color: #ff416c;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.header-left h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+}

@@ -1,0 +1,64 @@
+/* Remove the added style */ 
+
+.dashboard {
+  margin-left: 0;
+  max-width: 1000px;  /* Reduced max-width to match image */
+  margin: 0 auto;
+  padding: 5rem 2rem 2rem;
+  min-height: 100vh;
+  position: relative;
+  background: transparent;
+}
+
+/* Quick Stats Section */
+.quick-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;  /* Reduced gap to match image */
+  margin: 2rem;  /* Consistent margin */
+  padding: 0;
+}
+
+.stat-card {
+  background: white;
+  padding: 1.5rem;  /* Reduced padding */
+  border-radius: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  min-width: 0;  /* Remove min-width constraint */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;  /* Left align content */
+}
+
+.stat-card h3 {
+  color: #6B7280;
+  font-size: 1rem;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #111827;
+  margin-top: 0.5rem;
+}
+
+.stat-value.positive {
+  color: #10B981;
+}
+
+.stat-value.negative {
+  color: #ff4b2b;
+}
+
+/* Activity Section */
+.activity-section {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  margin: 2rem;  /* Match the margin of quick stats */
+} 
