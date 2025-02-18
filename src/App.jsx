@@ -22,26 +22,9 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route 
-          path="/" 
-          element={<LandingPage />} 
-        />
-        <Route 
-          path="/login" 
-          element={
-            isLoggedIn ? 
-            <Navigate to="/dashboard" /> : 
-            <LoginForm onLoginSuccess={() => setIsLoggedIn(true)} />
-          } 
-        />
-        <Route 
-          path="/dashboard" 
-          element={
-            isLoggedIn ? 
-            <MainDashboard onLogout={handleLogout} /> : 
-            <Navigate to="/login" />
-          } 
-        />
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<LoginForm />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route 
           path="/finances" 
           element={

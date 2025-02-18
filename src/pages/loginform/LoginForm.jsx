@@ -7,84 +7,68 @@ import { useNavigate } from 'react-router-dom';
 const LoginForm = () => {
   const [signIn, setSignIn] = useState(true);
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: '',
-  });
   const [error, setError] = useState('');
 
   const toggle = () => {
     setSignIn(!signIn);
   };
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-    setError('');
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formData = new FormData(e.target);
     
     try {
       if (signIn) {
-        const loginData = {
-          username: formData.get('username'),
-          password: formData.get('password')
-        };
+        // Get values directly from the form elements
+        const username = e.target.username.value;
+        const password = e.target.password.value;
+
+        const loginData = { username, password };
         
-        console.log('Sending login request:', {
-          url: `${API_URL}/api/user/login`,
-          data: loginData
-        });
+        console.log('Attempting login with:', loginData);
 
-        const response = await axios.post(`${API_URL}/api/user/login`, loginData, {
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          withCredentials: true
-        });
+        try {
+          const response = await axios.post(`${API_URL}/api/user/login`, loginData, {
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
 
-        console.log('Backend Response:', response.data);
+          console.log('Login response:', response.data);
 
-        // Check the response structure based on your LoginResponse class
-        if (response.data) {
-          // Store any necessary data from the response
-          if (response.data.token) {
-            localStorage.setItem('token', response.data.token);
+          if (response.data) {
+            // Store all response data
+            if (response.data.token) {
+              localStorage.setItem('token', response.data.token);
+            }
+            if (response.data.userId) {
+              localStorage.setItem('userId', response.data.userId.toString());
+            }
+            if (response.data.username) {
+              localStorage.setItem('username', response.data.username);
+            }
+
+            console.log('Login successful, stored data in localStorage');
+            console.log('Attempting to navigate to dashboard...');
+            
+            // Force navigation
+            window.location.href = '/dashboard';
+          } else {
+            console.error('Invalid response structure:', response.data);
+            setError('Invalid login response');
           }
-          if (response.data.user) {
-            localStorage.setItem('user', JSON.stringify(response.data.user));
+        } catch (apiError) {
+          console.error('API Error:', apiError);
+          if (apiError.response) {
+            console.error('Response data:', apiError.response.data);
+            console.error('Response status:', apiError.response.status);
           }
-          navigate('/dashboard');
-        } else {
-          setError('Invalid response from server');
+          throw apiError;
         }
       } else {
-        // Handle Sign Up
-        const signupData = {
-          name: formData.get('name'),
-          email: formData.get('email'),
-          password: formData.get('password')
-        };
-        
-        await axios.post(`${API_URL}/api/user/register`, signupData, {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        });
-        setSignIn(true);
+        // Handle signup...
       }
     } catch (error) {
-      console.error('Login Error:', {
-        message: error.message,
-        status: error.response?.status,
-        data: error.response?.data,
-      });
-      
-      // Show the actual error message from the backend
+      console.error('Login Error:', error);
       const errorMessage = error.response?.data?.message 
         || error.response?.data?.error 
         || 'Authentication failed';

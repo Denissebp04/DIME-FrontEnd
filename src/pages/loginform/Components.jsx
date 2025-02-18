@@ -288,7 +288,7 @@ export const Login = ({ onSubmit, signIn, toggle, error }) => {
         <SignUpContainer $signinIn={signIn}>
           <Form onSubmit={onSubmit}>
             <Title>Create Account</Title>
-            <Input type='text' name='name' placeholder='Name' required />
+            <Input type='text' name='username' placeholder='Username' required />
             <Input type='email' name='email' placeholder='Email' required />
             <Input type='password' name='password' placeholder='Password' required />
             {error && <Error>{error}</Error>}
@@ -299,8 +299,20 @@ export const Login = ({ onSubmit, signIn, toggle, error }) => {
         <SignInContainer $signinIn={signIn}>
           <Form onSubmit={onSubmit}>
             <Title>Sign in</Title>
-            <Input type='text' name='username' placeholder='Username' required />
-            <Input type='password' name='password' placeholder='Password' required />
+            <Input 
+              type='text' 
+              name='username' 
+              placeholder='Username' 
+              required 
+              onChange={(e) => console.log('Username input:', e.target.value)}
+            />
+            <Input 
+              type='password' 
+              name='password' 
+              placeholder='Password' 
+              required 
+              onChange={(e) => console.log('Password input:', e.target.value)}
+            />
             {error && <Error>{error}</Error>}
             <Anchor href='#'>Forgot your password?</Anchor>
             <Button type='submit'>Sign In</Button>
