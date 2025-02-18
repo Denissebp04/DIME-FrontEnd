@@ -53,7 +53,8 @@ function Reports({ onLogout }) {
     totalBudget: 0,
     savings: 0,
     expensesByCategory: {},
-    budgetUtilization: 0
+    budgetUtilization: 0,
+    budgetsByCategory: {}
   });
 
   const [chartData, setChartData] = useState({
@@ -96,6 +97,20 @@ function Reports({ onLogout }) {
           return acc;
         }, {});
 
+        // Calculate budget utilization by category
+        const budgetsByCategory = budgets.reduce((acc, budget) => {
+          // Get all expenses for this budget's category
+          const categoryExpenses = expenses.filter(exp => exp.category === budget.category)
+            .reduce((sum, exp) => sum + exp.amount, 0);
+
+          acc[budget.category] = {
+            budgeted: budget.amount,
+            spent: categoryExpenses,
+            utilization: (categoryExpenses / budget.amount) * 100
+          };
+          return acc;
+        }, {});
+
         // Prepare chart data
         const expenseChartData = {
           labels: Object.keys(expensesByCategory),
@@ -127,7 +142,8 @@ function Reports({ onLogout }) {
           totalBudget,
           savings: totalIncome - totalExpenses,
           expensesByCategory,
-          budgetUtilization
+          budgetUtilization,
+          budgetsByCategory
         });
 
       } catch (error) {
@@ -345,25 +361,37 @@ function Reports({ onLogout }) {
             </section>
           </div>
 
-          {/* Expense Categories Section */}
+          {/* Budget Categories Section */}
           <section className="categories-section">
-            <h2 className="section-title">Expense Categories</h2>
+            <h2 className="section-title">Budget Categories</h2>
             <div className="categories-grid">
-              {Object.entries(monthlyData.expensesByCategory).map(([category, amount]) => (
-                <div key={category} className="category-card">
-                  <h3>{category}</h3>
-                  <p className="amount">${amount.toFixed(2)}</p>
-                  <div className="progress-bar">
-                    <div 
-                      className="progress" 
-                      style={{ 
-                        width: `${(amount / monthlyData.totalExpenses) * 100}%`,
-                        backgroundColor: '#ff4b2b'
-                      }}
-                    />
+              {Object.entries(monthlyData.budgetsByCategory || {})
+                .filter(([_, data]) => data.spent > 0)  // Only show categories with spending
+                .map(([category, data]) => (
+                  <div key={category} className="category-card">
+                    <h3>{category}</h3>
+                    <div className="budget-details">
+                      <p className="budget-amount">Budget: ${data.budgeted.toFixed(2)}</p>
+                      <p className="spent-amount">
+                        Spent: <span className={data.spent > data.budgeted ? 'negative' : ''}>
+                          ${data.spent.toFixed(2)}
+                        </span>
+                      </p>
+                    </div>
+                    <div className="progress-bar">
+                      <div 
+                        className="progress" 
+                        style={{ 
+                          width: `${Math.min(data.utilization, 100)}%`,
+                          backgroundColor: data.spent > data.budgeted ? '#ff4b2b' : '#10B981'
+                        }}
+                      />
+                    </div>
+                    <p className="utilization">
+                      {data.utilization.toFixed(1)}% utilized
+                    </p>
                   </div>
-                </div>
-              ))}
+                ))}
             </div>
           </section>
         </div>

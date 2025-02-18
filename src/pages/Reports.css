@@ -1,0 +1,63 @@
+.category-card {
+  background: white;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.category-card h3 {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.budget-details {
+  margin: 0.25rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.budget-amount, .spent-amount {
+  font-size: 0.875rem;
+}
+
+.budget-amount {
+  color: #4F46E5;
+  font-weight: 600;
+}
+
+.spent-amount {
+  color: #6B7280;
+}
+
+.spent-amount .negative {
+  color: #ff4b2b;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 6px;
+  background-color: #E5E7EB;
+  border-radius: 4px;
+  margin: 0.25rem 0;
+  overflow: hidden;
+}
+
+.progress {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.utilization {
+  font-size: 0.75rem;
+  color: #6B7280;
+  text-align: right;
+  margin-top: 0.25rem;
+}
+
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+} 
