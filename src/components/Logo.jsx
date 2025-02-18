@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { PiggyBank as PiggyBankIcon } from 'lucide-react';
 
 const LogoContainer = styled.div`
   display: flex;
@@ -9,11 +10,6 @@ const LogoContainer = styled.div`
 
 const PiggyBank = styled.div`
   color: #ff4b2b;
-  
-  svg {
-    width: 32px;
-    height: 32px;
-  }
 `;
 
 const LogoText = styled.span`
@@ -27,7 +23,7 @@ const Logo = () => {
   return (
     <LogoContainer>
       <PiggyBank>
-        {/* We'll replace this with your landing page's piggy bank SVG */}
+        <PiggyBankIcon size={32} />
       </PiggyBank>
       <LogoText>DIME</LogoText>
     </LogoContainer>

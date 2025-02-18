@@ -17,6 +17,7 @@ import Sidebar from './components/Sidebar';
 import { expenseService } from '../services/expenseService';
 import { incomeService } from '../services/incomeService';
 import { budgetService } from '../services/budgetService';
+import Logo from '../components/Logo';
 
 // Register ChartJS components
 ChartJS.register(
@@ -217,7 +218,7 @@ function Reports({ onLogout }) {
             >
               <Menu size={24} />
             </button>
-            <h1 className="site-logo">DIME</h1>
+            <Logo />
           </div>
           <div className="header-right">
             <div className="profile-section">

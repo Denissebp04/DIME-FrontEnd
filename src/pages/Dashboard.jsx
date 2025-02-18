@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Dashboard.css';
 import { PiggyBank, ArrowUpRight, ArrowDownRight, DollarSign, ShoppingBag, Menu, User } from 'lucide-react';
+import Logo from '../components/Logo';
 
 // Import our components
 import BudgetCard from './components/BudgetCard';
@@ -195,7 +196,7 @@ function Dashboard({ onLogout }) {
             >
               <Menu size={24} />
             </button>
-            <h1 className="site-logo">DIME</h1>
+            <Logo />
           </div>
           <div className="header-right">
             <div className="profile-section">
