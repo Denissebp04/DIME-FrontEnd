@@ -279,7 +279,7 @@ function Reports({ onLogout }) {
                   <PieChart size={24} />
                 </div>
                 <div className="summary-details">
-                  <h3>Total Savings</h3>
+                  <h3>Remaining Balance</h3>
                   <p className="amount">${monthlyData.savings.toFixed(2)}</p>
                 </div>
               </div>
@@ -363,7 +363,7 @@ function Reports({ onLogout }) {
 
           {/* Budget Categories Section */}
           <section className="categories-section">
-            <h2 className="section-title">Budget Categories</h2>
+            <h2 className="section-title">Utilized Budget Categories</h2>
             <div className="categories-grid">
               {Object.entries(monthlyData.budgetsByCategory || {})
                 .filter(([_, data]) => data.spent > 0)  // Only show categories with spending
