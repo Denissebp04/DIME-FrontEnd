@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import React, { useEffect } from 'react';
 
 export const Container = styled.div`
     background-color: #fff;
@@ -108,7 +109,7 @@ export const OverlayContainer = styled.div`
 `;
 
 export const Overlay = styled.div`
-    background: linear-gradient(to right, #ff4b2b, #ff416c);
+    background: linear-gradient(45deg, #ff4b2b, #ff416c);
     background-repeat: no-repeat;
     background-size: cover;
     background-position: 0 0;
@@ -137,36 +138,14 @@ export const OverlayPanel = styled.div`
     transition: transform 0.6s ease-in-out;
 `;
 
-export const LeftOverlayPanel = styled.div`
-    position: absolute;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    padding: 0 40px;
-    text-align: center;
-    top: 0;
-    height: 100%;
-    width: 50%;
+export const LeftOverlayPanel = styled(OverlayPanel)`
     transform: translateX(-20%);
-    transition: transform 0.6s ease-in-out;
     ${props => props.$signinIn !== true ? `transform: translateX(0);` : null}
 `;
 
-export const RightOverlayPanel = styled.div`
-    position: absolute;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    padding: 0 40px;
-    text-align: center;
-    top: 0;
+export const RightOverlayPanel = styled(OverlayPanel)`
     right: 0;
     transform: translateX(0);
-    width: 50%;
-    height: 100%;
-    transition: transform 0.6s ease-in-out;
     ${props => props.$signinIn !== true ? `transform: translateX(20%);` : null}
 `;
 
@@ -228,4 +207,130 @@ export const LoginContainer = styled.div`
   align-items: center;
   min-height: 100vh;
   padding-top: 0;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(45deg, #ff4b2b, #ff416c);
 `;
+
+export const Coin = styled.div`
+  position: fixed;
+  top: -50px;
+  width: 25px;
+  height: 25px;
+  background: linear-gradient(45deg, #FFD700, #FDB931);
+  border-radius: 50%;
+  border: 2px solid #FDB931;
+  box-shadow: 
+    inset 0 0 10px #B88A44,
+    0 0 5px rgba(0,0,0,0.2);
+  animation: fall linear infinite;
+  z-index: 0;
+
+  &::before {
+    content: "$";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #B88A44;
+    font-weight: bold;
+    font-size: 16px;
+  }
+
+  @keyframes fall {
+    from {
+      transform: translateY(-50px) rotate(0deg);
+      opacity: 1;
+    }
+    to {
+      transform: translateY(120vh) rotate(360deg);
+      opacity: 0;
+    }
+  }
+`;
+
+export const Login = ({ onSubmit, signIn, toggle, error }) => {
+  useEffect(() => {
+    const createCoins = () => {
+      const loginContainer = document.querySelector('.login-container');
+      if (!loginContainer) {
+        console.log('No login container found');
+        return;
+      }
+
+      const coin = document.createElement('div');
+      coin.className = 'coin';
+      
+      coin.style.left = `${Math.random() * 100}vw`;
+      coin.style.animation = `fall ${Math.random() * 3 + 2}s linear infinite`;
+      coin.style.top = '-50px';
+      
+      loginContainer.appendChild(coin);
+      console.log('Coin created');
+      
+      setTimeout(() => {
+        coin.remove();
+      }, 5000);
+    };
+
+    console.log('Setting up coin interval');
+    const interval = setInterval(createCoins, 200);
+    return () => {
+      console.log('Cleaning up coin interval');
+      clearInterval(interval);
+    };
+  }, []);
+
+  return (
+    <LoginContainer className="login-container">
+      <Coin style={{ left: '50%', top: '20%' }} />
+      <Container>
+        <SignUpContainer $signinIn={signIn}>
+          <Form onSubmit={onSubmit}>
+            <Title>Create Account</Title>
+            <Input type='text' name='name' placeholder='Name' required />
+            <Input type='email' name='email' placeholder='Email' required />
+            <Input type='password' name='password' placeholder='Password' required />
+            {error && <Error>{error}</Error>}
+            <Button type='submit'>Sign Up</Button>
+          </Form>
+        </SignUpContainer>
+
+        <SignInContainer $signinIn={signIn}>
+          <Form onSubmit={onSubmit}>
+            <Title>Sign in</Title>
+            <Input type='text' name='username' placeholder='Username' required />
+            <Input type='password' name='password' placeholder='Password' required />
+            {error && <Error>{error}</Error>}
+            <Anchor href='#'>Forgot your password?</Anchor>
+            <Button type='submit'>Sign In</Button>
+          </Form>
+        </SignInContainer>
+
+        <OverlayContainer $signinIn={signIn}>
+          <Overlay $signinIn={signIn}>
+            <LeftOverlayPanel $signinIn={signIn}>
+              <Title>Welcome Back!</Title>
+              <Paragraph>
+                To keep connected with us please login with your personal info
+              </Paragraph>
+              <GhostButton onClick={toggle}>
+                Sign In
+              </GhostButton>
+            </LeftOverlayPanel>
+
+            <RightOverlayPanel $signinIn={signIn}>
+              <Title>Hello, Friend!</Title>
+              <Paragraph>
+                Enter your personal details and start journey with us
+              </Paragraph>
+              <GhostButton onClick={toggle}>
+                Sign Up
+              </GhostButton>
+            </RightOverlayPanel>
+          </Overlay>
+        </OverlayContainer>
+      </Container>
+    </LoginContainer>
+  );
+};
