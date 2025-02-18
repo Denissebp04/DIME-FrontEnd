@@ -63,13 +63,35 @@ const LoginForm = ({ onLoginSuccess }) => {
           setError('Invalid login response');
         }
       } else {
-        // Handle signup...
+        // Handle signup
+        const username = e.target.username.value;
+        const email = e.target.email.value;
+        const password = e.target.password.value;
+        
+        const signupData = { username, email, password };
+        
+        console.log('Signup attempt with:', { username, email });
+
+        const response = await axios.post(`${API_URL}/api/user/register`, signupData, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.data) {
+          console.log('Registration successful');
+          // Automatically switch to sign in
+          setSignIn(true);
+          setError('Registration successful! Please sign in.');
+        } else {
+          setError('Registration failed');
+        }
       }
     } catch (error) {
-      console.error('Login Error:', error);
+      console.error('Auth Error:', error);
       const errorMessage = error.response?.data?.message 
         || error.response?.data?.error 
-        || 'Authentication failed';
+        || (signIn ? 'Authentication failed' : 'Registration failed');
       setError(errorMessage);
     }
   };
