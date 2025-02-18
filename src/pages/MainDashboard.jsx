@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Menu, User, PiggyBank, ArrowUpRight, ArrowDownRight, Wallet, TrendingUp, CreditCard } from 'lucide-react';
 import Sidebar from './components/Sidebar';
+import Logo from '../components/Logo';
 import { expenseService } from '../services/expenseService';
 import { incomeService } from '../services/incomeService';
 import { budgetService } from '../services/budgetService';
@@ -153,7 +154,7 @@ function MainDashboard({ onLogout }) {
             >
               <Menu size={24} />
             </button>
-            <h1 className="site-logo">DIME</h1>
+            <Logo />
           </div>
           <div className="header-right">
             <div className="profile-section">

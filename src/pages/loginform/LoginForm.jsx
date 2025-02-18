@@ -4,7 +4,7 @@ import * as Components from './Components';
 import { API_URL } from '../../config/config';
 import { useNavigate } from 'react-router-dom';
 
-const LoginForm = () => {
+const LoginForm = ({ onLoginSuccess }) => {
   const [signIn, setSignIn] = useState(true);
   const navigate = useNavigate();
   const [error, setError] = useState('');
@@ -18,51 +18,49 @@ const LoginForm = () => {
     
     try {
       if (signIn) {
-        // Get values directly from the form elements
         const username = e.target.username.value;
         const password = e.target.password.value;
-
         const loginData = { username, password };
         
-        console.log('Attempting login with:', loginData);
+        console.log('Login attempt with username:', username);
 
-        try {
-          const response = await axios.post(`${API_URL}/api/user/login`, loginData, {
-            headers: {
-              'Content-Type': 'application/json'
-            }
+        const response = await axios.post(`${API_URL}/api/user/login`, loginData, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+
+        // Log the exact response structure
+        console.log('Raw response data:', JSON.stringify(response.data, null, 2));
+
+        if (response.data) {
+          // Store username before token and userId
+          if (response.data.username) {
+            console.log('Setting username:', response.data.username);
+            localStorage.setItem('username', response.data.username);
+          } else {
+            console.warn('No username in response data');
+          }
+
+          if (response.data.token) {
+            localStorage.setItem('token', response.data.token);
+          }
+          if (response.data.userId) {
+            localStorage.setItem('userId', response.data.userId.toString());
+          }
+
+          // Verify storage
+          console.log('Stored values:', {
+            username: localStorage.getItem('username'),
+            token: localStorage.getItem('token'),
+            userId: localStorage.getItem('userId')
           });
 
-          console.log('Login response:', response.data);
-
-          if (response.data) {
-            // Store all response data
-            if (response.data.token) {
-              localStorage.setItem('token', response.data.token);
-            }
-            if (response.data.userId) {
-              localStorage.setItem('userId', response.data.userId.toString());
-            }
-            if (response.data.username) {
-              localStorage.setItem('username', response.data.username);
-            }
-
-            console.log('Login successful, stored data in localStorage');
-            console.log('Attempting to navigate to dashboard...');
-            
-            // Force navigation
-            window.location.href = '/dashboard';
-          } else {
-            console.error('Invalid response structure:', response.data);
-            setError('Invalid login response');
-          }
-        } catch (apiError) {
-          console.error('API Error:', apiError);
-          if (apiError.response) {
-            console.error('Response data:', apiError.response.data);
-            console.error('Response status:', apiError.response.status);
-          }
-          throw apiError;
+          onLoginSuccess?.();
+          navigate('/dashboard');
+        } else {
+          console.error('Invalid response structure:', response.data);
+          setError('Invalid login response');
         }
       } else {
         // Handle signup...
