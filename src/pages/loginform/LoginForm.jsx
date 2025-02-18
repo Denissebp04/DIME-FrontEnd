@@ -20,57 +20,56 @@ const LoginForm = ({ onLoginSuccess }) => {
       if (signIn) {
         const username = e.target.username.value;
         const password = e.target.password.value;
-        const loginData = { username, password };
         
-        console.log('Login attempt with username:', username);
+        // Test localStorage access
+        try {
+          localStorage.setItem('test', 'before-login');
+          console.log('Can write to localStorage:', localStorage.getItem('test') === 'before-login');
+        } catch (e) {
+          console.error('localStorage test failed:', e);
+        }
 
-        const response = await axios.post(`${API_URL}/api/user/login`, loginData, {
-          headers: {
-            'Content-Type': 'application/json'
-          }
+        const response = await axios.post(`${API_URL}/api/user/login`, 
+          { username, password },
+          { headers: { 'Content-Type': 'application/json' }}
+        );
+
+        console.log('Login response data:', {
+          hasUsername: !!response.data?.username,
+          username: response.data?.username,
+          fullResponse: response.data
         });
 
-        // Log the exact response structure
-        console.log('Raw response data:', JSON.stringify(response.data, null, 2));
-
-        if (response.data) {
-          // Store username before token and userId
-          if (response.data.username) {
-            console.log('Setting username:', response.data.username);
+        if (response.data?.username) {
+          try {
+            // Store each piece separately and verify
             localStorage.setItem('username', response.data.username);
-          } else {
-            console.warn('No username in response data');
-          }
-
-          if (response.data.token) {
             localStorage.setItem('token', response.data.token);
-          }
-          if (response.data.userId) {
             localStorage.setItem('userId', response.data.userId.toString());
+            
+            // Verify storage
+            console.log('Storage verification:', {
+              storedUsername: localStorage.getItem('username'),
+              storedToken: !!localStorage.getItem('token'),
+              storedUserId: localStorage.getItem('userId')
+            });
+
+            onLoginSuccess?.();
+            navigate('/dashboard');
+          } catch (storageError) {
+            console.error('Storage error:', storageError);
+            setError('Failed to save login data');
           }
-
-          // Verify storage
-          console.log('Stored values:', {
-            username: localStorage.getItem('username'),
-            token: localStorage.getItem('token'),
-            userId: localStorage.getItem('userId')
-          });
-
-          onLoginSuccess?.();
-          navigate('/dashboard');
         } else {
-          console.error('Invalid response structure:', response.data);
+          console.warn('Invalid response:', response.data);
           setError('Invalid login response');
         }
       } else {
         // Handle signup...
       }
     } catch (error) {
-      console.error('Login Error:', error);
-      const errorMessage = error.response?.data?.message 
-        || error.response?.data?.error 
-        || 'Authentication failed';
-      setError(errorMessage);
+      console.error('Login error:', error);
+      setError(error.response?.data?.message || 'Authentication failed');
     }
   };
 
