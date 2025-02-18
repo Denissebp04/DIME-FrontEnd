@@ -8,7 +8,7 @@ function Income({ onBack, transactions, setTransactions }) {
   const [showAddModal, setShowAddModal] = useState(false);
   const [editingIncome, setEditingIncome] = useState(null);
 
-  const handleIncomeSubmit = async (incomeData, incomeId) => {
+  const handleIncomeSubmit = async (incomeData) => {
     try {
       const userId = localStorage.getItem('userId');
       if (!userId) {
@@ -25,11 +25,11 @@ function Income({ onBack, transactions, setTransactions }) {
       };
 
       let response;
-      if (incomeId) {
+      if (editingIncome?.id) {
         // Update existing income
-        response = await incomeService.updateIncome(incomeId, incomePayload);
+        response = await incomeService.updateIncome(editingIncome.id, incomePayload);
         setTransactions(prev => prev.map(t => 
-          t.id === `income-${incomeId}` ? {
+          t.id === `income-${editingIncome.id}` ? {
             id: `income-${response.id}`,
             name: response.title,
             amount: Math.abs(response.amount),
@@ -104,11 +104,13 @@ function Income({ onBack, transactions, setTransactions }) {
                   <button 
                     className="edit-button"
                     onClick={() => {
+                      const incomeId = income.id.replace('income-', '');
                       const incomeToEdit = {
                         name: income.name,
                         category: income.category,
                         amount: income.amount.toString(),
-                        date: income.date
+                        date: income.date,
+                        id: incomeId
                       };
                       setEditingIncome(incomeToEdit);
                       setShowAddModal(true);
