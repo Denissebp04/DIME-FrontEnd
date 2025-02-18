@@ -1,14 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
 import { PiggyBank as PiggyBankIcon } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const LogoContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
+  cursor: pointer;
 `;
 
-const PiggyBank = styled.div`
+const PiggyBankWrapper = styled.div`
   color: #ff4b2b;
 `;
 
@@ -20,11 +22,13 @@ const LogoText = styled.span`
 `;
 
 const Logo = () => {
+  const navigate = useNavigate();
+
   return (
-    <LogoContainer>
-      <PiggyBank>
+    <LogoContainer onClick={() => navigate('/')}>
+      <PiggyBankWrapper>
         <PiggyBankIcon size={32} />
-      </PiggyBank>
+      </PiggyBankWrapper>
       <LogoText>DIME</LogoText>
     </LogoContainer>
   );
