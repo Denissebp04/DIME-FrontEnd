@@ -324,7 +324,7 @@ export const Login = ({ onSubmit, signIn, toggle, error }) => {
             <LeftOverlayPanel $signinIn={signIn}>
               <Title>Welcome Back!</Title>
               <Paragraph>
-                To keep connected with us please login with your personal info
+              Already have an account? Sign in with your credentials
               </Paragraph>
               <GhostButton onClick={toggle}>
                 Sign In
@@ -332,9 +332,9 @@ export const Login = ({ onSubmit, signIn, toggle, error }) => {
             </LeftOverlayPanel>
 
             <RightOverlayPanel $signinIn={signIn}>
-              <Title>Hello, Friend!</Title>
+              <Title>First Time Here?</Title>
               <Paragraph>
-                Enter your personal details and start journey with us
+                No problem, sign up and take control of your finances today
               </Paragraph>
               <GhostButton onClick={toggle}>
                 Sign Up

@@ -46,8 +46,19 @@ function Dashboard({ onLogout }) {
   // Add state for budget management
   const [showBudgetManagement, setShowBudgetManagement] = useState(false);
 
-  // Update username state to check localStorage on mount and changes
-  const [username, setUsername] = useState('');
+  // Get username from localStorage
+  const [username, setUsername] = useState(() => {
+    const user = localStorage.getItem('user');
+    if (user) {
+      try {
+        const userData = JSON.parse(user);
+        return userData.username || 'User';  // fallback to 'User' if no username
+      } catch (e) {
+        return 'User';
+      }
+    }
+    return 'User';
+  });
 
   // Add this state
   const [budgets, setBudgets] = useState([]);
@@ -60,29 +71,6 @@ function Dashboard({ onLogout }) {
 
   // Add state for sidebar
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-  useEffect(() => {
-    // Function to get username from localStorage
-    const getUsername = () => {
-      const storedUsername = window.localStorage.getItem('username');
-      console.log('Current stored username:', storedUsername);
-      setUsername(storedUsername || 'User');
-    };
-
-    // Get username immediately
-    getUsername();
-
-    // Set up event listener for storage changes
-    window.addEventListener('storage', getUsername);
-    
-    // Also check every time component mounts
-    const interval = setInterval(getUsername, 1000);
-
-    return () => {
-      window.removeEventListener('storage', getUsername);
-      clearInterval(interval);
-    };
-  }, []);
 
   useEffect(() => {
     console.log('Dashboard mounted');
@@ -169,12 +157,6 @@ function Dashboard({ onLogout }) {
 
     fetchBudgets();
   }, []);
-
-  // Add this effect after your username state
-  useEffect(() => {
-    console.log('Current username state:', username);
-    console.log('Username in localStorage:', localStorage.getItem('username'));
-  }, [username]);
 
   const handleAddTransaction = () => {
     setShowAddModal(true);
