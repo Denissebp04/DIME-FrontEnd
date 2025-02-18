@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './AddTransactionModal.css';
+import { IncomeCategory } from '../../types/IncomeCategory';
 
 // This component shows the modal for adding new transactions
 function AddTransactionModal({ onClose, onSubmit, editTransaction = null, type = 'expense' }) {
@@ -36,7 +37,7 @@ function AddTransactionModal({ onClose, onSubmit, editTransaction = null, type =
     // Submit the form data
     onSubmit({
       name: formData.name,
-      category: formData.category,
+      category: formData.category,  // Use selected category directly
       amount: parseFloat(formData.amount),
       date: formData.date
     });
@@ -61,30 +62,42 @@ function AddTransactionModal({ onClose, onSubmit, editTransaction = null, type =
             />
           </div>
 
-          {/* Only show category field for expenses */}
-          {type === 'expense' && (
-            <div className="form-group">
-              <label>Category</label>
-              <select
-                value={formData.category}
-                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                required
-              >
-                <option value="">Select category</option>
-                <option value="HOUSING">Housing (Rent, mortgage, repairs)</option>
-                <option value="UTILITIES">Utilities (Electricity, water, gas, internet)</option>
-                <option value="FOOD">Food (Groceries, dining out)</option>
-                <option value="TRANSPORT">Transport (Car payments, gas, public transit)</option>
-                <option value="HEALTHCARE">Healthcare (Medical expenses, insurance)</option>
-                <option value="SAVINGS">Savings (Emergency fund, investments)</option>
-                <option value="ENTERTAINMENT">Entertainment (Recreation, hobbies)</option>
-                <option value="SHOPPING">Shopping (Clothing, personal items)</option>
-                <option value="EDUCATION">Education (Tuition, books, courses)</option>
-                <option value="DEBT">Debt (Credit card, loans)</option>
-                <option value="OTHER">Other (Miscellaneous expenses)</option>
-              </select>
-            </div>
-          )}
+          {/* Show different category options based on type */}
+          <div className="form-group">
+            <label>Category</label>
+            <select
+              value={formData.category}
+              onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+              required
+            >
+              {type === 'income' ? (
+                <>
+                  <option value="">Select category</option>
+                  <option value="SALARY">Salary</option>
+                  <option value="FREELANCE">Freelance</option>
+                  <option value="INVESTMENTS">Investments</option>
+                  <option value="BUSINESS">Business</option>
+                  <option value="RENTAL">Rental</option>
+                  <option value="OTHER">Other</option>
+                </>
+              ) : (
+                // Existing expense categories
+                <>
+                  <option value="HOUSING">Housing (Rent, mortgage, repairs)</option>
+                  <option value="UTILITIES">Utilities (Electricity, water, gas, internet)</option>
+                  <option value="FOOD">Food (Groceries, dining out)</option>
+                  <option value="TRANSPORT">Transport (Car payments, gas, public transit)</option>
+                  <option value="HEALTHCARE">Healthcare (Medical expenses, insurance)</option>
+                  <option value="SAVINGS">Savings (Emergency fund, investments)</option>
+                  <option value="ENTERTAINMENT">Entertainment (Recreation, hobbies)</option>
+                  <option value="SHOPPING">Shopping (Clothing, personal items)</option>
+                  <option value="EDUCATION">Education (Tuition, books, courses)</option>
+                  <option value="DEBT">Debt (Credit card, loans)</option>
+                  <option value="OTHER">Other (Miscellaneous expenses)</option>
+                </>
+              )}
+            </select>
+          </div>
 
           <div className="form-group">
             <label>Amount</label>

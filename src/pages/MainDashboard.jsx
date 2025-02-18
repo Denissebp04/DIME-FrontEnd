@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Menu, User, PiggyBank, ArrowUpRight, ArrowDownRight } from 'lucide-react';
+import { Menu, User, PiggyBank, ArrowUpRight, ArrowDownRight, Wallet, TrendingUp, CreditCard } from 'lucide-react';
 import Sidebar from './components/Sidebar';
 import { expenseService } from '../services/expenseService';
 import { incomeService } from '../services/incomeService';
@@ -61,10 +61,15 @@ function MainDashboard({ onLogout }) {
           }))
         ];
 
-        // Sort by date (most recent first)
-        allActivities.sort((a, b) => b.date - a.date);
+        // Filter out invalid dates and sort by date
+        const validActivities = allActivities.filter(activity => 
+          activity.date instanceof Date && !isNaN(activity.date)
+        );
         
-        setActivities(allActivities);
+        // Sort by date (most recent first)
+        validActivities.sort((a, b) => b.date - a.date);
+        
+        setActivities(validActivities);
       } catch (error) {
         console.error('Error fetching activities:', error);
       }
@@ -81,6 +86,55 @@ function MainDashboard({ onLogout }) {
     if (date.toDateString() === today.toDateString()) return 'Today';
     if (date.toDateString() === yesterday.toDateString()) return 'Yesterday';
     return date.toLocaleDateString();
+  };
+
+  const calculateTotalBalance = () => {
+    const totalIncome = activities
+      .filter(t => t.amount > 0)
+      .reduce((sum, t) => sum + t.amount, 0);
+      
+    const totalExpenses = activities
+      .filter(t => t.amount < 0)
+      .reduce((sum, t) => sum + Math.abs(t.amount), 0);
+      
+    return totalIncome - totalExpenses;
+  };
+
+  const calculateMonthlySavings = () => {
+    const currentDate = new Date();
+    const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+
+    // Filter for this month's transactions
+    const thisMonthActivities = activities.filter(activity => {
+      const activityDate = new Date(activity.date);
+      return activityDate >= firstDayOfMonth && activityDate <= currentDate;
+    });
+
+    const monthlyIncome = thisMonthActivities
+      .filter(t => t.amount > 0)
+      .reduce((sum, t) => sum + t.amount, 0);
+
+    const monthlyExpenses = thisMonthActivities
+      .filter(t => t.amount < 0)
+      .reduce((sum, t) => sum + Math.abs(t.amount), 0);
+
+    return monthlyIncome - monthlyExpenses;
+  };
+
+  const calculateMonthlySpending = () => {
+    const currentDate = new Date();
+    const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+
+    // Filter for this month's expenses only
+    const thisMonthExpenses = activities.filter(activity => {
+      const activityDate = new Date(activity.date);
+      return activityDate >= firstDayOfMonth && 
+             activityDate <= currentDate && 
+             activity.amount < 0;  // Only negative amounts (expenses)
+    });
+
+    // Sum up the expenses (use absolute values)
+    return thisMonthExpenses.reduce((sum, t) => sum + Math.abs(t.amount), 0);
   };
 
   return (
@@ -114,22 +168,43 @@ function MainDashboard({ onLogout }) {
 
         <div className="dashboard-content">
           <header className="dashboard-header">
-            <h1>Dashboard</h1>
+            <h1>My Dashboard</h1>
           </header>
 
           {/* Quick Stats Section */}
           <div className="quick-stats">
-            <div className="stat-card">
-              <h3>Total Balance</h3>
-              <p className="stat-value">$2,070.00</p>
+            <div className="card">
+              <div className="card-header">
+                <div className="icon-wrapper blue">
+                  <Wallet size={24} />
+                </div>
+                <h2 className="card-title">Total Balance</h2>
+              </div>
+              <div className="card-amount">
+                {calculateTotalBalance().toFixed(2)}
+              </div>
             </div>
-            <div className="stat-card">
-              <h3>Monthly Savings</h3>
-              <p className="stat-value positive">+$520.00</p>
+            <div className="card">
+              <div className="card-header">
+                <div className="icon-wrapper green">
+                  <TrendingUp size={24} />
+                </div>
+                <h2 className="card-title">Monthly Savings</h2>
+              </div>
+              <div className={`card-amount ${calculateMonthlySavings() >= 0 ? 'positive' : 'negative'}`}>
+                {calculateMonthlySavings().toFixed(2)}
+              </div>
             </div>
-            <div className="stat-card">
-              <h3>Monthly Spending</h3>
-              <p className="stat-value negative">-$1,500.00</p>
+            <div className="card">
+              <div className="card-header">
+                <div className="icon-wrapper red">
+                  <CreditCard size={24} />
+                </div>
+                <h2 className="card-title">Monthly Spending</h2>
+              </div>
+              <div className="card-amount negative">
+                {calculateMonthlySpending().toFixed(2)}
+              </div>
             </div>
           </div>
 

@@ -61,4 +61,23 @@
   border-radius: 1rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   margin: 2rem;  /* Match the margin of quick stats */
+}
+
+.card-amount.positive {
+  color: #10B981;  /* Green color for positive amounts */
+}
+
+.card-amount.negative {
+  color: #ff4b2b;  /* Red color for negative amounts */
+}
+
+/* Icon wrapper colors */
+.icon-wrapper.green {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: #10B981;
+}
+
+.icon-wrapper.red {
+  background-color: rgba(255, 75, 43, 0.1);
+  color: #ff4b2b;
 } 
