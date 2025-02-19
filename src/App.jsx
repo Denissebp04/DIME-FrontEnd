@@ -47,7 +47,7 @@ function App() {
           path="/finances" 
           element={
             isLoggedIn ? 
-            <Dashboard /> : 
+            <Dashboard onLogout={handleLogout} /> : 
             <Navigate to="/login" />
           }
         />
