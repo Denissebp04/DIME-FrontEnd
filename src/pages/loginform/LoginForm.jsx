@@ -22,39 +22,33 @@ const LoginForm = ({ onLoginSuccess }) => {
         const password = e.target.password.value;
         const loginData = { username, password };
         
-        console.log('Login attempt with username:', username);
+        console.log('Login attempt with:', loginData);
 
-        const response = await axios.post(`${API_URL}/api/user/login`, loginData, {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        });
+        try {
+          const response = await axios.post(`${API_URL}/api/user/login`, loginData, {
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
 
-        // Add detailed logging
-        console.log('Full login response:', response);
-        console.log('Login response data:', response.data);
-        console.log('Username from response:', response.data.username);
+          console.log('Server response:', response);
 
-        if (response.data) {
-          // Store username before token and userId
-          if (response.data.username) {
-            console.log('Setting username:', response.data.username);
-            localStorage.setItem('username', response.data.username);
-          } else {
-            console.warn('No username in response data');
-            // If username isn't in response.data, try to use the input username
-            localStorage.setItem('username', username);
+          if (!response.data) {
+            throw new Error('No data received from server');
           }
 
-          if (response.data.token) {
-            localStorage.setItem('token', response.data.token);
-          }
-          if (response.data.userId) {
-            localStorage.setItem('userId', response.data.userId.toString());
+          // Check response structure
+          if (!response.data.token || !response.data.userId) {
+            console.error('Invalid response structure:', response.data);
+            throw new Error('Invalid server response structure');
           }
 
-          // Verify storage
-          console.log('Stored values:', {
+          // Store user data
+          localStorage.setItem('username', username);
+          localStorage.setItem('token', response.data.token);
+          localStorage.setItem('userId', response.data.userId.toString());
+
+          console.log('Login successful, stored data:', {
             username: localStorage.getItem('username'),
             token: localStorage.getItem('token'),
             userId: localStorage.getItem('userId')
@@ -62,9 +56,9 @@ const LoginForm = ({ onLoginSuccess }) => {
 
           onLoginSuccess?.();
           navigate('/dashboard');
-        } else {
-          console.error('Invalid response structure:', response.data);
-          setError('Invalid login response');
+        } catch (apiError) {
+          console.error('API Error:', apiError);
+          throw new Error(apiError.response?.data?.message || 'Login request failed');
         }
       } else {
         // Handle signup
@@ -92,11 +86,8 @@ const LoginForm = ({ onLoginSuccess }) => {
         }
       }
     } catch (error) {
-      console.error('Auth Error:', error);
-      const errorMessage = error.response?.data?.message 
-        || error.response?.data?.error 
-        || (signIn ? 'Authentication failed' : 'Registration failed');
-      setError(errorMessage);
+      console.error('Login Error:', error);
+      setError(error.message || 'Authentication failed');
     }
   };
 
