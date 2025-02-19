@@ -30,8 +30,10 @@ const LoginForm = ({ onLoginSuccess }) => {
           }
         });
 
-        // Log the exact response structure
-        console.log('Raw response data:', JSON.stringify(response.data, null, 2));
+        // Add detailed logging
+        console.log('Full login response:', response);
+        console.log('Login response data:', response.data);
+        console.log('Username from response:', response.data.username);
 
         if (response.data) {
           // Store username before token and userId
@@ -40,6 +42,8 @@ const LoginForm = ({ onLoginSuccess }) => {
             localStorage.setItem('username', response.data.username);
           } else {
             console.warn('No username in response data');
+            // If username isn't in response.data, try to use the input username
+            localStorage.setItem('username', username);
           }
 
           if (response.data.token) {

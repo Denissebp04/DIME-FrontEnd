@@ -35,16 +35,7 @@ ChartJS.register(
 function Reports({ onLogout }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [username, setUsername] = useState(() => {
-    const user = localStorage.getItem('user');
-    if (user) {
-      try {
-        const userData = JSON.parse(user);
-        return userData.username || 'User';
-      } catch (e) {
-        return 'User';
-      }
-    }
-    return 'User';
+    return localStorage.getItem('username') || 'User';
   });
 
   const [monthlyData, setMonthlyData] = useState({

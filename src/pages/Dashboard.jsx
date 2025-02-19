@@ -48,16 +48,7 @@ function Dashboard({ onLogout }) {
 
   // Get username from localStorage
   const [username, setUsername] = useState(() => {
-    const user = localStorage.getItem('user');
-    if (user) {
-      try {
-        const userData = JSON.parse(user);
-        return userData.username || 'User';  // fallback to 'User' if no username
-      } catch (e) {
-        return 'User';
-      }
-    }
-    return 'User';
+    return localStorage.getItem('username') || 'User';
   });
 
   // Add this state

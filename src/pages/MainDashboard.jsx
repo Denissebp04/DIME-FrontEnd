@@ -12,16 +12,7 @@ function MainDashboard({ onLogout }) {
   const [activeSection, setActiveSection] = useState('dashboard');
   const [activities, setActivities] = useState([]);
   const [username, setUsername] = useState(() => {
-    const user = localStorage.getItem('user');
-    if (user) {
-      try {
-        const userData = JSON.parse(user);
-        return userData.username || 'User';
-      } catch (e) {
-        return 'User';
-      }
-    }
-    return 'User';
+    return localStorage.getItem('username') || 'User';
   });
 
   useEffect(() => {

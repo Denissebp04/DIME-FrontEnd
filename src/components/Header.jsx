@@ -37,33 +37,40 @@ const LogoutButton = styled.button`
 `;
 
 const Header = ({ onLogout }) => {
-  const [username, setUsername] = useState('User');
+  const [username, setUsername] = useState(() => {
+    // Initialize with value from localStorage
+    return localStorage.getItem('username') || 'User';
+  });
 
   useEffect(() => {
-    const updateUsername = () => {
-      const storedUsername = localStorage.getItem('username');
-      console.log('Current stored username:', storedUsername);
-      setUsername(storedUsername || 'User');
-    };
-
-    // Update username when component mounts
-    updateUsername();
-
-    // Listen for storage changes
-    window.addEventListener('storage', updateUsername);
-
-    return () => {
-      window.removeEventListener('storage', updateUsername);
-    };
-  }, []);
-
-  // Also check username when the component renders
-  useEffect(() => {
+    // Update username when component mounts and when localStorage changes
     const storedUsername = localStorage.getItem('username');
-    if (storedUsername && storedUsername !== username) {
+    if (storedUsername) {
       setUsername(storedUsername);
     }
-  });
+
+    // Function to handle storage changes
+    const handleStorageChange = () => {
+      const currentUsername = localStorage.getItem('username');
+      if (currentUsername && currentUsername !== username) {
+        setUsername(currentUsername);
+      }
+    };
+
+    // Add event listener
+    window.addEventListener('storage', handleStorageChange);
+    
+    // Check username periodically
+    const interval = setInterval(() => {
+      handleStorageChange();
+    }, 1000);
+
+    // Cleanup
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      clearInterval(interval);
+    };
+  }, [username]);
 
   return (
     <HeaderContainer>
